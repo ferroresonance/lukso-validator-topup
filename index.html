@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark" />
+  <title>LUKSO Validator Top Up</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div>
+        <div class="eyebrow">OPEN TOOL</div>
+        <h1>LUKSO Validator Top Up</h1>
+        <p class="subtitle">Top up an existing validator through the canonical LUKSO Mainnet deposit contract.</p>
+      </div>
+      <div class="network-pill">LUKSO MAINNET · 42</div>
+    </header>
+
+    <section class="card wallet-card">
+      <div class="row spread align-center gap">
+        <div>
+          <div class="label">Wallet</div>
+          <div id="walletStatus" class="mono muted">Not connected</div>
+        </div>
+        <button id="connectButton" class="button secondary">Connect MetaMask</button>
+      </div>
+      <div id="networkWarning" class="notice hidden"></div>
+    </section>
+
+    <section class="card">
+      <div class="section-heading">
+        <div class="step">1</div>
+        <div>
+          <h2>Validator</h2>
+          <p>Paste the 48-byte BLS public key of the validator you want to top up.</p>
+        </div>
+      </div>
+
+      <label for="pubkey">Validator public key</label>
+      <textarea id="pubkey" spellcheck="false" autocomplete="off" placeholder="0x... (96 hex characters after 0x)"></textarea>
+      <div class="field-footer">
+        <span id="pubkeyStatus" class="muted">No validator pubkey entered.</span>
+        <span id="pubkeyLength" class="mono muted">0 / 48 bytes</span>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="section-heading">
+        <div class="step">2</div>
+        <div>
+          <h2>Top-up amount</h2>
+          <p>The deposit contract requires at least 1 LYX per deposit. Up to 9 decimal places are supported.</p>
+        </div>
+      </div>
+
+      <div class="amount-wrap">
+        <input id="amount" inputmode="decimal" autocomplete="off" value="1" />
+        <span>LYX</span>
+      </div>
+      <div id="amountStatus" class="field-footer muted">Minimum: 1 LYX.</div>
+    </section>
+
+    <section class="card preview-card">
+      <div class="section-heading">
+        <div class="step">3</div>
+        <div>
+          <h2>Review</h2>
+          <p>This tool reconstructs the standard top-up deposit root locally with zero withdrawal credentials and zero signature, then sends the LYX through MetaMask.</p>
+        </div>
+      </div>
+
+      <div class="review-grid">
+        <div class="review-item">
+          <span>Contract</span>
+          <code id="contractAddress">0xCAfe00000000000000000000000000000000CAfe</code>
+        </div>
+        <div class="review-item">
+          <span>Network</span>
+          <strong>LUKSO Mainnet (42)</strong>
+        </div>
+        <div class="review-item">
+          <span>Top up</span>
+          <strong id="reviewAmount">1 LYX</strong>
+        </div>
+        <div class="review-item">
+          <span>Deposit data root</span>
+          <code id="depositRoot">Enter a valid validator pubkey</code>
+        </div>
+      </div>
+
+      <label class="check-row">
+        <input id="acknowledge" type="checkbox" />
+        <span>I have verified the validator public key and I understand this sends real LYX on LUKSO Mainnet.</span>
+      </label>
+
+      <button id="topupButton" class="button primary" disabled>Top Up Validator</button>
+      <div class="safety-note">This page never asks for a seed phrase or validator keystore. MetaMask signs the execution-layer transaction.</div>
+    </section>
+
+    <section id="statusCard" class="card status-card hidden">
+      <div class="label">Transaction status</div>
+      <div id="statusTitle" class="status-title"></div>
+      <pre id="statusText"></pre>
+      <a id="txLink" class="tx-link hidden" target="_blank" rel="noreferrer">Open transaction in LUKSO explorer</a>
+    </section>
+
+    <footer>
+      <div>Deposit contract: <code>0xCAfe00000000000000000000000000000000CAfe</code></div>
+      <div>Use only for validators whose pubkeys you have verified independently.</div>
+    </footer>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6.15.0/dist/ethers.umd.min.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
